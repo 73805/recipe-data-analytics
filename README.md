@@ -1,6 +1,15 @@
 # Big Oven Recipe Scraping with Python
-This repository holds the scripts I am using to scrape (somewhat) standardized slow cooker recipes off of [Big Oven](https://www.bigoven.com/) using the selenium library.
+This repository holds the scripts I am using to scrape (somewhat) standardized slow cooker recipes off of [Big Oven](https://www.bigoven.com/) using the selenium library. Big Oven has good HTML semantics to isolate each ingredient and quantity measurement as well as built in metric conversion, yield scaling and a calorie per serving approximation. 
 
-The first script visits the paginated collection of links to recipes to gather 10,000 URLs and takes 3-4 hours to complete (each page displays 20 recipes in a grid.
+The first script (big_oven_slow_cooker_urls.py) traverses the site's paginated collection of slow cooker recipes and grabs each of their URLs. In total, it gathers 10,000 URLs spread across 500 pages. The script takes 3-4 hours to finish.
 
-The second script extracts seven features of each recipe including a dictionary of ingredients and their amounts. This script accesses Big Oven's built in recipe resizing inputs to convert measurements to metric and number of servings to 10 before extracting ingredients. The scraped data still requires processing due to mis-typed quantities and the apparently subjective nature of the base 'servings' count. (ex: a range of 2-3 pounds is converted to nothing, and the author of the recipe can specify how many servings it makes). 
+The second script (big_oven_crawler.py) visits each recipe and extracts seven features; 
+* url
+* title
+* rating
+* number of reviews
+* estimated prep time
+* calories per serving
+* ingredients (as a dictionary of name:quantity pairs)
+
+A preliminary preprocessing step is achieved by adjusting Big Oven's built in recipe resizing inputs to convert measurements to metric and number of servings to 10 before extracting ingredients. Unfortunately, poorly authored recipes don't always behave properly and additional post processing is needed. The base number of servings appears to be subjectively input which skews ingredient amounts, but the calories measure is calculated independently and may be useful for detecting defective recipes. Due to bloated page-loading times and the input steps, this script processes each recipe in 10-15 seconds. In 8 hours it can gather around 2,000 entries.
