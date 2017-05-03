@@ -1,12 +1,11 @@
-import pandas as pd
-
 '''
 This script takes the one-hot encoded matrix and converts
 it into an R association rules style CSV. 
 Each row is a recipe, and each cell in a row is any of the ingredients
 in that recipe.
-
 '''
+
+import pandas as pd
 
 df = pd.read_pickle("pkls/final_recipe_set.pkl")
 df = df.reset_index(drop=True)
@@ -45,4 +44,6 @@ for i, row in df.iterrows():
 
 mb = mb.drop_duplicates()
 mb = mb.reset_index(drop=True)
+
+# 0's must be removed in excel!
 mb.to_csv('market_basket_no_gar-oni.csv', header=False,index=False)

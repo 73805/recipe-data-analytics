@@ -8,7 +8,7 @@
 library(arules)
 library(arulesViz)
 
-mb <- read.transactions("market_basket_no_gar-oni.csv", format="basket", sep=",")
+mb <- read.transactions("market_basket.csv", format="basket", sep=",")
 
 itemFrequencyPlot(mb, support = 0.08,
                   main="Ingredient: Item Frequency Plot (support=0.08)",
@@ -17,7 +17,6 @@ itemFrequencyPlot(mb, support = 0.08,
 
 minSup = .005
 minConf = .8
-rules=apriori(mb, parameter=list(minlen=2, support=minSup, confidence=minConf))
 
 ##################################
 ## Create the association model ##

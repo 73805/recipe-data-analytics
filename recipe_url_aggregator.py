@@ -1,13 +1,21 @@
+'''
+This script scrapes the 500 paginated results of a query for
+'slow cooker' recipes in the 'main dish' category. There are
+supposed to be upwards of 600 pages, but the server must limit
+the result set because pages past 500 (10,000 recipes) are empty.
+The URLs of each individual recipe are collected for the single-page
+crawler.
+'''
 from selenium import webdriver
 import time
-import pandas as pd
+import pickle
 
-chrome_path = "C:\Users\Jay\Desktop\Applied Data Science\project\chromedriver.exe" 
+chrome_path = "C:\Users\Jay\Desktop\Applied Data Science\project\chromedriver.exe"
 driver = webdriver.Chrome(chrome_path)
 
 recipe_urls = []
 # Hard-code number of pages. The site lists extra blank pages for no reason..
-numPages = 500
+numPages = 2
 for pageNum in range(1, numPages):
     pageUrl = "https://www.bigoven.com/recipes/search/page/" + str(pageNum) + "?any_kw=slow+cooker&include_primarycat=Main+Dish"
     driver.get(pageUrl)
@@ -19,8 +27,7 @@ for pageNum in range(1, numPages):
     for j, e in enumerate(recipe_a_list):
         href = e.get_attribute("href")
         recipe_urls.append(href)
-        print href
 
-# Convert list to dataframe and export to csv
-df = pd.DataFrame(recipe_urls)
-df.to_csv('big_oven_slow_cooker_urls.csv', header='urls')
+# Save the URL list to a pkl file
+with open('pkls/recipe_urls.pkl', 'wb') as f:
+    pickle.dump(recipe_urls, f)
